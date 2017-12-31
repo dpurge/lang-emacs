@@ -1,16 +1,8 @@
+(require 'quail)
+
 (quail-define-package
- "jdp-indic-postfix" "UTF-8" "Ind<" t
-  "Input method for Indic transliteration with postfix modifiers.
-
-     Long vowels are dealt with by doubling.
-
-     |                  | postfix | examples             |
-     |------------------+---------+----------------------|
-     | macron           |         | aa  -> ā    ee  -> ē |
-     | diacritic below  | .       | d.  -> ḍ    rr. -> ṝ |
-     | diacritic above  | '       | s'  -> ś    n'  -> ṅ |
-     | tilde            | ~       | n~  -> ñ             |
-  "
+  "jdp-indic-postfix" "UTF-8" "Ind<" t
+  "Input method for Indic transliteration with postfix modifiers."
   nil t nil nil nil nil nil nil nil nil t)
 
 (quail-define-rules
