@@ -18,6 +18,11 @@
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-greek))
+    ("zho"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      ;(set-frame-font "Times New Roman")
+      (set-input-method 'eim-py))
     (otherwise
       (message "Unknown language code %S" lang-code)))
 )
@@ -65,3 +70,27 @@
 (require 'xah-lookup)
 
 ;(global-set-key (kbd "<f2>") 'xah-lookup-wikipedia) ; F2
+
+(require 'chinese-fonts-setup)
+;(chinese-fonts-setup-enable)
+(autoload 'eim-use-package "eim" "Another emacs input method")
+(setq eim-use-tooltip nil)
+(register-input-method "eim-wb" "utf-8"
+  'eim-use-package "五笔" "汉字五笔输入法" "wb.txt")
+(register-input-method "eim-py" "utf-8"
+  'eim-use-package "拼音" "汉字拼音输入法" "py.txt")
+
+
+(autoload 'ispell-get-word "ispell")
+(defun lookup-word (word)
+  (interactive (list (save-excursion (car (ispell-get-word nil)))))
+  (browse-url (format "http://en.wiktionary.org/wiki/%s" word)))
+(global-set-key (kbd "M-#") 'lookup-word)
+
+(defun get-selected-text (start end)
+  (interactive "r")
+    (if (use-region-p)
+        (let ((regionp (buffer-substring start end)))
+            ;(message regionp)
+            (browse-url (format "http://en.wiktionary.org/wiki/%s" regionp)))))
+(global-set-key (kbd "M-=") 'get-selected-text)
