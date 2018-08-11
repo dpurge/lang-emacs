@@ -3,6 +3,7 @@
 
 (require 'jdp-ara-buckwalter)
 (require 'jdp-greek)
+(require 'jdp-hebrew)
 
 (defun set-jdp-lang (lang-code)
   "Set up buffer for Arabic editing."
@@ -18,6 +19,11 @@
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-greek))
+    ("heb"
+      (setq bidi-display-reordering t)
+      (setq bidi-paragraph-direction 'right-to-left)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'jdp-hebrew))
     (otherwise
       (message "Unknown language code %S" lang-code)))
 )
