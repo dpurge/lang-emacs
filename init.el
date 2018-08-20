@@ -1,6 +1,7 @@
 ;; INSTALLATION
 ;; cd %APPDATA%\.emacs.d\
 ;; mklink /D input D:\src\gitea\emacs\input
+;; mklink /D public D:\src\gitea\emacs\public
 ;; mklink init.el D:\src\gitea\emacs\init.el
 
 
@@ -31,6 +32,17 @@
 (global-set-key (vector (list 'control mouse-wheel-up-event))   'text-scale-decrease)
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/input"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/public"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/public/eim"))
+
 (require 'jdp-lang)
+(require 'jdp-json)
 
 (global-set-key (kbd "<f2>") 'set-jdp-lang) ; F2
+
+;; testing
+
+(global-set-key (kbd "M-#") 'lookup-word)
+(global-set-key (kbd "M-=") 'get-selected-text)
+(global-set-key (kbd "<f4>") 'jdp-apply-json-format)
+(global-set-key (kbd "<f5>") 'jdp-set-json-format-pattern)

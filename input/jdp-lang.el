@@ -4,6 +4,8 @@
 (require 'jdp-ara-buckwalter)
 (require 'jdp-greek)
 (require 'jdp-hebrew)
+(require 'jdp-vie-viqr)
+(require 'jdp-zho-pinyin)
 
 (defun set-jdp-lang (lang-code)
   "Set up buffer for Arabic editing."
@@ -24,11 +26,21 @@
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-hebrew))
+    ("vie"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      ;(set-frame-font "Times New Roman")
+      (set-input-method 'jdp-vie-viqr))
     ("zho"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       ;(set-frame-font "Times New Roman")
       (set-input-method 'eim-py))
+    ("zho-py"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      ;(set-frame-font "Times New Roman")
+      (set-input-method 'jdp-zho-pinyin))
     (otherwise
       (message "Unknown language code %S" lang-code)))
 )
@@ -91,7 +103,6 @@
 (defun lookup-word (word)
   (interactive (list (save-excursion (car (ispell-get-word nil)))))
   (browse-url (format "http://en.wiktionary.org/wiki/%s" word)))
-(global-set-key (kbd "M-#") 'lookup-word)
 
 (defun get-selected-text (start end)
   (interactive "r")
@@ -99,4 +110,3 @@
         (let ((regionp (buffer-substring start end)))
             ;(message regionp)
             (browse-url (format "http://en.wiktionary.org/wiki/%s" regionp)))))
-(global-set-key (kbd "M-=") 'get-selected-text)
