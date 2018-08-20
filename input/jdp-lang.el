@@ -16,21 +16,46 @@
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-ara-buckwalter))
+    ("fas"
+      (setq bidi-display-reordering t)
+      (setq bidi-paragraph-direction 'right-to-left)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'farsi-transliterate-banan))
+    ("geo"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'georgian))
+    ("ger"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'german-prefix))
     ("grc"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
-      (set-input-method 'jdp-greek))
+      (set-input-method 'greek-babel))
     ("heb"
       (setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-hebrew))
+    ("rus"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'cyrillic-translit))
+    ("spa"
+      (setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (set-frame-font "Times New Roman")
+      (set-input-method 'spanish-prefix))
     ("vie"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
-      ;(set-frame-font "Times New Roman")
-      (set-input-method 'jdp-vie-viqr))
+      (set-frame-font "Times New Roman")
+      (set-input-method 'vietnamese-viqr))
     ("zho"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)

@@ -31,6 +31,9 @@
 (global-set-key (vector (list 'control mouse-wheel-down-event)) 'text-scale-increase)
 (global-set-key (vector (list 'control mouse-wheel-up-event))   'text-scale-decrease)
 
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/input"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/public"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/public/eim"))
