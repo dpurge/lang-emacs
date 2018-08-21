@@ -6,15 +6,15 @@
 " nil t nil nil nil nil nil nil nil nil t)
 
 (quail-define-rules
-("'" "ء")
-("|" "آ")
-(">" "أ")
+("'" "ء") ; lone hamza
+("|" "آ") ; madda on alif
+(">" "أ") ; hamza on alif
 ("&" "ؤ")
 ("<" "إ")
 ("}" "ئ")
 ("A" "ا")
 ("b" "ب")
-("p" "ة")
+("p" "ة") ; ta marbuta
 ("t" "ت")
 ("v" "ث")
 ("j" "ج")
@@ -43,14 +43,14 @@
 ("w" "و")
 ("Y" "ى")
 ("y" "ي")
-("F" "ً")
-("N" "ٌ")
-("K" "ٍ")
-("a" "َ")
-("u" "ُ")
-("i" "ِ")
-("~" "ّ")
-("o" "ْ")
+("F" "ً") ; fathatayn
+("N" "ٌ") ; dammatayn
+("K" "ٍ") ; kasratayn
+("a" "َ") ; fatha
+("u" "ُ") ; damma
+("i" "ِ") ; kasra
+("~" "ّ") ; shadda
+("o" "ْ") ; sukun
 ("`" "ٰ")
 ("{" "ٱ")
 ("?" "؟")
