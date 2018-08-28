@@ -15,12 +15,16 @@
       (setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
-      (set-input-method 'jdp-ara-buckwalter))
+      (set-input-method 'jdp-ara-buckwalter)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
     ("fas"
       (setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
-      (set-input-method 'farsi-transliterate-banan))
+      (set-input-method 'farsi-transliterate-banan)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
     ("geo"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
@@ -45,27 +49,35 @@
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
-      (set-input-method 'cyrillic-translit))
+      (set-input-method 'cyrillic-translit)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-no-transcription))
     ("spa"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
-      (set-input-method 'spanish-prefix))
+      (set-input-method 'spanish-prefix)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-no-transcription))
     ("vie"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
-      (set-input-method 'vietnamese-viqr))
+      (set-input-method 'vietnamese-viqr)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-no-transcription))
     ("zho"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       ;(set-frame-font "Times New Roman")
-      (set-input-method 'eim-py))
-    ("zho-py"
+      (set-input-method 'eim-py)
+      (setq jdp-json-format-pattern
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
+    ("zho-t"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       ;(set-frame-font "Times New Roman")
-      (set-input-method 'jdp-zho-pinyin))
+      (set-input-method 'chinese-sisheng))
     (otherwise
       (message "Unknown language code %S" lang-code)))
 )
