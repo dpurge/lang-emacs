@@ -17,14 +17,14 @@
       (set-frame-font "Times New Roman")
       (set-input-method 'jdp-ara-buckwalter)
       (setq jdp-json-format-pattern
-	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription))
     ("fas"
       (setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
       (set-frame-font "Times New Roman")
       (set-input-method 'farsi-transliterate-banan)
       (setq jdp-json-format-pattern
-	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription))
     ("geo"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
@@ -72,7 +72,7 @@
       ;(set-frame-font "Times New Roman")
       (set-input-method 'eim-py)
       (setq jdp-json-format-pattern
-	    jdp-anki-pattern-vocabulary-phrase-with-transcription)))
+	    jdp-anki-pattern-vocabulary-phrase-with-transcription))
     ("zho-t"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
