@@ -39,7 +39,8 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/public/eim"))
 
 (require 'jdp-lang)
-(require 'jdp-json)
+;(require 'jdp-json)
+(require 'jdp-lang-mode)
 
 (global-set-key (kbd "<f2>") 'set-jdp-lang) ; F2
 
@@ -49,3 +50,15 @@
 (global-set-key (kbd "M-=") 'get-selected-text)
 (global-set-key (kbd "<f4>") 'jdp-apply-json-format)
 (global-set-key (kbd "<f5>") 'jdp-set-json-format-pattern)
+(global-set-key (kbd "<f6>") 'lookup-word)
+
+
+;(add-hook 'jdp-lang-mode-hook
+;  '(lambda ()
+;    (define-key jdp-lang-mode-map "\C-m" 'newline-and-indent)
+;    (define-key jdp-lang-mode-map "\M-\r" 'jdp-lang-add-record)
+;    (define-key jdp-lang-mode-map (kbd "C-<tab>") 'jdp-lang-next-field)
+;    (define-key jdp-lang-mode-map (kbd "C-S-<tab>") 'jdp-lang-prev-field)
+;  ))
+
+
