@@ -24,6 +24,9 @@
       \"transcription\": \"\",
       \"grammar\": \"\",
       \"translation\": \"\",
+      \"image\": \"\",
+      \"audio\": \"\",
+      \"video\": \"\",
       \"note\": \"\"
     }")
 
@@ -77,6 +80,9 @@
       (jdp-lang-mode-ime (make-hash-table :test 'equal))
     )
     (pcase language
+      ("arb"
+        (puthash "phrase" 'jdp-ara-buckwalter jdp-lang-mode-ime)
+        (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))
       ("cmn"
         (puthash "phrase" 'eim-py jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-zho-pinyin jdp-lang-mode-ime))
@@ -164,6 +170,9 @@
 		  (transcription (gethash "transcription" item))
 		  (grammar (gethash "grammar" item))
 		  (translation (gethash "translation" item))
+		  (image (gethash "image" item))
+		  (audio (gethash "audio" item))
+		  (video (gethash "video" item))
 		  (note (gethash "note" item))
 		  
 		  (url-request-data (encode-coding-string (concatenate 'string
@@ -179,6 +188,9 @@
 				    (format "\"transcription\":\"%s\"," transcription)
 				    (format "\"grammar\":\"%s\"," grammar)
 				    (format "\"translation\":\"%s\"," translation)
+				    (format "\"image\":\"%s\"," image)
+				    (format "\"audio\":\"%s\"," audio)
+				    (format "\"video\":\"%s\"," video)
 				    (format "\"note\":\"%s\"" note)
 				  "},"
 				  "\"options\":{"
