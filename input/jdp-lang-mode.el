@@ -22,12 +22,24 @@
     {
       \"phrase\": \"\",
       \"transcription\": \"\",
-      \"grammar\": \"\",
-      \"translation\": \"\",
-      \"image\": \"\",
-      \"audio\": \"\",
-      \"video\": \"\",
-      \"note\": \"\"
+      \"category\": {
+        \"lexical\": \"\"
+      },
+      \"translation\": {
+        \"eng\": \"\",
+        \"pol\": \"\"
+      }
+    }")
+(defconst jdp-lang-mode-data-record-format-simple ",
+    {
+      \"phrase\": \"\",
+      \"category\": {
+        \"lexical\": \"\"
+      },
+      \"translation\": {
+        \"eng\": \"\",
+        \"pol\": \"\"
+      }
     }")
 
 ;;; variables
@@ -95,8 +107,14 @@
 
 (defun jdp-lang-mode-add-record ()
   (interactive)
-  (re-search-forward "}")
-  (insert jdp-lang-mode-data-record-format)
+  (goto-char (point-max))
+  (re-search-backward "]")
+  (re-search-backward "}")
+  (forward-char)
+  (if (member (gethash "language" jdp-lang-mode-meta) '("arb" "cmn"))
+    (insert jdp-lang-mode-data-record-format)
+    (insert jdp-lang-mode-data-record-format-simple))
+  (re-search-backward "\"phrase\" *:")
   (re-search-backward "{")
   (jdp-lang-mode-next-field)
 )
