@@ -46,8 +46,9 @@
 (defvar jdp-lang-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "RET") #'jdp-lang-mode-add-record)
+    ;(define-key map (kbd "M-RET") #'jdp-lang-mode-add-record)
     (define-key map (kbd "<tab>") #'jdp-lang-mode-next-field)
-    (define-key map (kbd "M-RET") #'jdp-lang-mode-upload-anki)
+    ;(define-key map (kbd "M-RET") #'jdp-lang-mode-upload-anki)
     map)
   "Keymap for `jdp-lang-mode'.")
 
@@ -98,6 +99,33 @@
       ("cmn"
         (puthash "phrase" 'eim-py jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-zho-pinyin jdp-lang-mode-ime))
+      ("deu"
+        (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("ell"
+        (puthash "phrase" 'greek-babel jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("fra"
+        (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("geo"
+        (puthash "phrase" 'georgian jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("heb"
+        (puthash "phrase" 'jdp-hebrew jdp-lang-mode-ime)
+        (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))
+      ("hin"
+        (puthash "phrase" 'devanagari-itrans jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("rus"
+        (puthash "phrase" 'cyrillic-translit jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("spa"
+        (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("tur"
+        (puthash "phrase" 'turkish-alt-postfix jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       (otherwise
         (message "Unsupported IME language: %s" language))
     )
@@ -139,96 +167,96 @@
   (re-search-forward "\" *: *\"")
   )
   
-(defun jdp-lang-mode-upload-anki ()
-  (interactive)
-  (goto-char (point-min))
-  (set-buffer-modified-p nil)
-  
-  (re-search-forward "\"data\" *: *")
-
-  (let*
-    (
-      (json-object-type 'hash-table)
-      (json-array-type 'list)
-      (json-key-type 'string)
-      (jdp-lang-mode-data (json-read-array))
-	  
-      (anki-url "http://127.0.0.1:8765/")
-	  (anki-deck (format "%s::%s"
-	    (gethash "language" jdp-lang-mode-meta)
-	    (gethash "format" jdp-lang-mode-meta)))
-	  (anki-model (format "%s-%s"
-	    (gethash "language" jdp-lang-mode-meta)
-	    (gethash "format" jdp-lang-mode-meta)))
-	  (anki-tags (json-encode (gethash "tags" jdp-lang-mode-meta)))
-	  
-      (url-request-method "POST")
-      (url-request-extra-headers '(("Content-Type" . "application/json")))
-    )
-	
-	(let (
-	  (url-request-data (encode-coding-string (concatenate 'string
-		    "{"
-			  "\"action\":\"createDeck\","
-			  "\"version\":6,"
-			  "\"params\":{"
-			    (format "\"deck\":\"%s\"" anki-deck)
-			  "}"
-			"}") 'utf-8)
-		  )
-	)
-	(message "Adding deck: %s" anki-deck)
-	(url-retrieve anki-url (lambda (status) (kill-buffer (current-buffer)) ))
-	)
-
-    (dolist (item jdp-lang-mode-data)
-      (let*
-	    (
-		  (phrase (gethash "phrase" item))
-		  (transcription (gethash "transcription" item))
-		  (grammar (gethash "grammar" item))
-		  (translation (gethash "translation" item))
-		  (image (gethash "image" item))
-		  (audio (gethash "audio" item))
-		  (video (gethash "video" item))
-		  (note (gethash "note" item))
-		  
-		  (url-request-data (encode-coding-string (concatenate 'string
-		    "{"
-			  "\"action\":\"addNote\","
-			  "\"version\":6,"
-			  "\"params\":{"
-			    "\"note\":{"
-				  (format "\"deckName\":\"%s\"," anki-deck)
-				  (format "\"modelName\":\"%s\"," anki-model)
-				  "\"fields\":{"
-				    (format "\"phrase\":\"%s\"," phrase)
-				    (format "\"transcription\":\"%s\"," transcription)
-				    (format "\"grammar\":\"%s\"," grammar)
-				    (format "\"translation\":\"%s\"," translation)
-				    (format "\"image\":\"%s\"," image)
-				    (format "\"audio\":\"%s\"," audio)
-				    (format "\"video\":\"%s\"," video)
-				    (format "\"note\":\"%s\"" note)
-				  "},"
-				  "\"options\":{"
-				    "\"allowDuplicate\": false"
-				  "},"
-				  (format "\"tags\":%s" anki-tags)
-				"}"
-			  "}"
-			"}") 'utf-8)
-		  )
-		)
-        (message "Adding: %s" phrase)
-        (url-retrieve anki-url (lambda (status)
-		  ;(switch-to-buffer (current-buffer))
-		  (kill-buffer (current-buffer))
-		))
-	  )
-	)
-  )
-)
+;(defun jdp-lang-mode-upload-anki ()
+;  (interactive)
+;  (goto-char (point-min))
+;  (set-buffer-modified-p nil)
+;  
+;  (re-search-forward "\"data\" *: *")
+;
+;  (let*
+;    (
+;      (json-object-type 'hash-table)
+;      (json-array-type 'list)
+;      (json-key-type 'string)
+;      (jdp-lang-mode-data (json-read-array));
+;      
+;      (anki-url "http://127.0.0.1:8765/")
+;	  (anki-deck (format "%s::%s"
+;	    (gethash "language" jdp-lang-mode-meta)
+;	    (gethash "format" jdp-lang-mode-meta)))
+;	  (anki-model (format "%s-%s"
+;	    (gethash "language" jdp-lang-mode-meta)
+;	    (gethash "format" jdp-lang-mode-meta)))
+;	  (anki-tags (json-encode (gethash "tags" jdp-lang-mode-meta)))
+;	  
+;      (url-request-method "POST")
+;      (url-request-extra-headers '(("Content-Type" . "application/json")))
+;    )
+;	
+;	(let (
+;	  (url-request-data (encode-coding-string (concatenate 'string
+;		    "{"
+;			  "\"action\":\"createDeck\","
+;			  "\"version\":6,"
+;			  "\"params\":{"
+;			    (format "\"deck\":\"%s\"" anki-deck)
+;			  "}"
+;			"}") 'utf-8)
+;		  )
+;	)
+;	(message "Adding deck: %s" anki-deck)
+;	(url-retrieve anki-url (lambda (status) (kill-buffer (current-buffer)) ))
+;	)
+;
+;    (dolist (item jdp-lang-mode-data)
+;      (let*
+;	    (
+;		  (phrase (gethash "phrase" item))
+;		  (transcription (gethash "transcription" item))
+;		  (grammar (gethash "grammar" item))
+;		  (translation (gethash "translation" item))
+;		  (image (gethash "image" item))
+;		  (audio (gethash "audio" item))
+;		  (video (gethash "video" item))
+;		  (note (gethash "note" item))
+;		  
+;		  (url-request-data (encode-coding-string (concatenate 'string
+;		    "{"
+;			  "\"action\":\"addNote\","
+;			  "\"version\":6,"
+;			  "\"params\":{"
+;			    "\"note\":{"
+;				  (format "\"deckName\":\"%s\"," anki-deck)
+;				  (format "\"modelName\":\"%s\"," anki-model)
+;				  "\"fields\":{"
+;				    (format "\"phrase\":\"%s\"," phrase)
+;				    (format "\"transcription\":\"%s\"," transcription)
+;				    (format "\"grammar\":\"%s\"," grammar)
+;				    (format "\"translation\":\"%s\"," translation)
+;				    (format "\"image\":\"%s\"," image)
+;				    (format "\"audio\":\"%s\"," audio)
+;				    (format "\"video\":\"%s\"," video)
+;				    (format "\"note\":\"%s\"" note)
+;				  "},"
+;				  "\"options\":{"
+;				    "\"allowDuplicate\": false"
+;				  "},"
+;				  (format "\"tags\":%s" anki-tags)
+;				"}"
+;			  "}"
+;			"}") 'utf-8)
+;		  )
+;		)
+;        (message "Adding: %s" phrase)
+;        (url-retrieve anki-url (lambda (status)
+;		  ;(switch-to-buffer (current-buffer))
+;		  (kill-buffer (current-buffer))
+;		))
+;	  )
+;	)
+;  )
+;)
 
 (add-to-list 'auto-mode-alist '("\\.jdp-lang\\.json\\'" . jdp-lang-mode))
 (provide 'jdp-lang-mode)
