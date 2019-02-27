@@ -126,6 +126,9 @@
       ("tur"
         (puthash "phrase" 'turkish-alt-postfix jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("vie"
+        (puthash "phrase" 'vietnamese-viqr jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       (otherwise
         (message "Unsupported IME language: %s" language))
     )
