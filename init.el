@@ -1,8 +1,8 @@
 ;; INSTALLATION
 ;; cd %APPDATA%\.emacs.d\
-;; mklink /D input D:\src\gitea\emacs\input
-;; mklink /D public D:\src\gitea\emacs\public
-;; mklink init.el D:\src\gitea\emacs\init.el
+;; mklink /D input D:\src\github.com\dpurge\lang-emacs\input
+;; mklink /D public D:\src\github.com\dpurge\lang-emacs\public
+;; mklink init.el D:\src\github.com\dpurge\lang-emacs\init.el
 
 
 ;; Added by Package.el.  This must come before configurations of
