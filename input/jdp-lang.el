@@ -7,6 +7,12 @@
 (require 'jdp-vie-viqr)
 (require 'jdp-zho-pinyin)
 
+;;;; OTHER START ;;;;
+(require 'jdp-bul)
+(require 'jdp-ron)
+(require 'jdp-tgk)
+;;;; OTHER END ;;;;
+
 (defun set-jdp-lang (lang-code)
   "Set up buffer for Arabic editing."
   (interactive "sChoose language: ")
