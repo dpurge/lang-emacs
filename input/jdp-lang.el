@@ -9,8 +9,12 @@
 
 ;;;; OTHER START ;;;;
 (require 'jdp-bul)
+(require 'jdp-ces)
+(require 'jdp-hun)
+(require 'jdp-kat)
 (require 'jdp-ron)
 (require 'jdp-tgk)
+(require 'jdp-yid)
 ;;;; OTHER END ;;;;
 
 (defun set-jdp-lang (lang-code)

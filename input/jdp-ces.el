@@ -1,0 +1,41 @@
+(require 'quail)
+
+(quail-define-package
+  "jdp-ces" "UTF-8" "ces<" t
+  "Czech input method."
+  nil t nil nil nil nil nil nil nil nil t)
+
+(quail-define-rules
+("A`" "Á")
+("a`" "á")
+("C`" "Č")
+("c`" "č")
+("D`" "Ď")
+("d`" "ď")
+("E`" "É")
+("e`" "é")
+("E``" "Ě")
+("e``" "ě")
+("I`" "Í")
+("i`" "í")
+("N`" "Ň")
+("n`" "ň")
+("O`" "Ó")
+("o`" "ó")
+("R`" "Ř")
+("r`" "ř")
+("S`" "Š")
+("s`" "š")
+("T`" "Ť")
+("t`" "ť")
+("U`" "Ú")
+("u`" "ú")
+("U``" "Ů")
+("u``" "ů")
+("Y`" "Ý")
+("y`" "ý")
+("Z`" "Ž")
+("z`" "ž")
+)
+
+(provide 'jdp-ces)
