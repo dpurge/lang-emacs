@@ -4,7 +4,6 @@
 (require 'jdp-ara-buckwalter)
 (require 'jdp-greek)
 (require 'jdp-hebrew)
-(require 'jdp-vie-viqr)
 (require 'jdp-zho-pinyin)
 
 ;;;; OTHER START ;;;;
@@ -14,6 +13,7 @@
 (require 'jdp-kat)
 (require 'jdp-ron)
 (require 'jdp-tgk)
+(require 'jdp-vie)
 (require 'jdp-yid)
 ;;;; OTHER END ;;;;
 
@@ -73,7 +73,7 @@
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-frame-font "Times New Roman")
-      (set-input-method 'vietnamese-viqr)
+      (set-input-method 'jdp-vie)
       (setq jdp-json-format-pattern
 	    jdp-anki-pattern-vocabulary-phrase-no-transcription))
     ("zho"
