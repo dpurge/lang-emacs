@@ -9,6 +9,7 @@
 ;;;; OTHER START ;;;;
 (require 'jdp-bul)
 (require 'jdp-ces)
+(require 'jdp-hin)
 (require 'jdp-hun)
 (require 'jdp-kat)
 (require 'jdp-ron)
