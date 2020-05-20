@@ -38,6 +38,11 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/public"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/public/eim"))
 
+(setq csv-separators '("\t" "|"))
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode" "Major mode for editing comma-separated value files." t)
+; Use csv-align-fields (default keybinding C-c C-a) to line up the field values into columns.
+
 (require 'jdp-lang)
 ;(require 'jdp-json)
 (require 'jdp-lang-mode)

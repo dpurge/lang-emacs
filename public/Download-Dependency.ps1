@@ -1,3 +1,9 @@
+# csv-mode
+if (-not (Test-Path "${PsScriptRoot}/csv-mode.el" -PathType leaf)) {
+    Write-Host 'Download: cvs-mode'
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/csv-mode.el' -OutFile "${PsScriptRoot}/csv-mode.el"
+}
+
 # xah-lookup
 if (-not (Test-Path "${PsScriptRoot}/xah-lookup.el" -PathType leaf)) {
     Write-Host 'Download: xah-lookup'
