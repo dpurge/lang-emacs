@@ -41,6 +41,7 @@
 (require 'jdp-lang)
 ;(require 'jdp-json)
 (require 'jdp-lang-mode)
+(require 'jdp-util)
 
 (global-set-key (kbd "<f2>") 'set-jdp-lang) ; F2
 
@@ -51,6 +52,7 @@
 (global-set-key (kbd "<f4>") 'jdp-apply-json-format)
 (global-set-key (kbd "<f5>") 'jdp-set-json-format-pattern)
 (global-set-key (kbd "<f6>") 'lookup-word)
+(global-set-key (kbd "<f9>") 'wrap-region-anki-closure)
 
 
 ;(add-hook 'jdp-lang-mode-hook
