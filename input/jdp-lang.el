@@ -3,6 +3,7 @@
 
 (require 'jdp-ara-buckwalter)
 (require 'jdp-greek)
+(require 'jdp-greek-polytonic)
 (require 'jdp-hebrew)
 (require 'jdp-zho-pinyin)
 
