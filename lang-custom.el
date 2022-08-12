@@ -4,11 +4,6 @@
 ;; mklink /D public D:\src\github.com\dpurge\lang-emacs\public
 ;; mklink init.el D:\src\github.com\dpurge\lang-emacs\init.el
 
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
 (package-initialize)
 
 (set-face-attribute 'default nil :height 160)
