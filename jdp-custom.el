@@ -76,3 +76,10 @@
 
 ;; Use MyPrivateFont for the Unicode private use area.
 ;(set-fontset-font "fontset-default"  '(#xe000 . #xf8ff) "MyPrivateFont")
+
+; emacs.exe --eval '(set-lang \"lat\")' .\Version.txt
+(defun set-lang (lang)
+  (interactive)
+  ;(switch-to-buffer (make-temp-name "vocabulary"))
+  (switch-to-buffer (get-buffer-create (concat "*" lang "-vocabulary*")))
+)
