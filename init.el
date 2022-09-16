@@ -2,7 +2,7 @@
 ;; cd %APPDATA%\.emacs.d\
 ;; mklink /D input D:\src\github.com\dpurge\lang-emacs\input
 ;; mklink /D public D:\src\github.com\dpurge\lang-emacs\public
-;; mklink init.el D:\src\github.com\dpurge\lang-emacs\jdp-custom.el
+;; mklink jdp-custom.el D:\src\github.com\dpurge\lang-emacs\jdp-custom.el
 ;; mklink init.el D:\src\github.com\dpurge\lang-emacs\init.el
 
 ;; Custom init file
