@@ -47,7 +47,8 @@
     ("fas"
       (setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
-      (set-input-method 'farsi-transliterate-banan))
+      (setq jdp-ime-phrase 'farsi-transliterate-banan)
+      (setq jdp-ime-transcription 'jdp-semitic-postfix))
     ("geo"
       (setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
