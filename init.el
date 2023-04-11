@@ -7,5 +7,4 @@
 
 ;; Custom init file
 (setq custom-file (expand-file-name "jdp-custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
+(when (file-exists-p custom-file) (load custom-file))
