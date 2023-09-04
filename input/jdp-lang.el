@@ -24,6 +24,7 @@
 ;;;; OTHER START ;;;;
 (require 'jdp-bul)
 (require 'jdp-ces)
+(require 'jdp-deu)
 (require 'jdp-hin)
 (require 'jdp-hun)
 (require 'jdp-kat)
@@ -45,6 +46,11 @@
       (setq bidi-paragraph-direction 'right-to-left)
       (setq jdp-ime-phrase 'jdp-ara-buckwalter)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
+    ("deu"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-deu)
+      (setq jdp-ime-transcription nil))
     ("fas"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
