@@ -6,14 +6,14 @@
   nil t nil nil nil nil nil nil nil nil t)
 
 (quail-define-rules
-("Ae" "Ä")
-("Oe" "Ö")
-("Ue" "Ü")
-("Sz" "ẞ")
-("ae" "ä")
-("oe" "ö")
-("ue" "ü")
-("sz" "ß")
+("A`" "Ä")
+("O`" "Ö")
+("U`" "Ü")
+("S`" "ẞ")
+("a`" "ä")
+("o`" "ö")
+("u`" "ü")
+("s`" "ß")
 )
 
 (provide 'jdp-deu)
