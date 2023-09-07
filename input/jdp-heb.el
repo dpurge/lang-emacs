@@ -1,7 +1,7 @@
 (require 'quail)
 
 (quail-define-package
-"jdp-hebrew" "UTF-8" "Heb<" t
+"jdp-heb" "UTF-8" "Heb<" t
 "Latin transcription for Hebrew.
 " nil t nil nil nil nil nil nil nil nil t)
 
@@ -81,4 +81,4 @@
 ("\:" "\u05C3") ; sof pasuq
 )
 
-(provide 'jdp-hebrew)
+(provide 'jdp-heb)

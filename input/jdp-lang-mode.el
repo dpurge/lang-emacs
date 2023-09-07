@@ -103,7 +103,7 @@
         (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("ell"
-        (puthash "phrase" 'greek-babel jdp-lang-mode-ime)
+        (puthash "phrase" 'jdp-ell jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("fra"
         (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
@@ -112,7 +112,7 @@
         (puthash "phrase" 'georgian jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("heb"
-        (puthash "phrase" 'jdp-hebrew jdp-lang-mode-ime)
+        (puthash "phrase" 'jdp-heb jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))
       ("hin"
         (puthash "phrase" 'devanagari-itrans jdp-lang-mode-ime)

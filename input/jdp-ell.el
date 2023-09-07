@@ -1,12 +1,11 @@
 (require 'quail)
 
 (quail-define-package
-"jdp-greek" "UTF-8" "Grc<" t
-"Latin transcription for Greek.
-" nil t nil nil nil nil nil nil nil nil t)
+  "jdp-ell" "UTF-8" "ell<" t
+  "Latin transcription for Greek."
+  nil t nil nil nil nil nil nil nil nil t)
 
 (quail-define-rules
-
   ("A" "Α")
   ("a" "α")
   ("B" "Β")
@@ -58,30 +57,40 @@
   ("w" "ω")
   
   ; monotonic accents
-  ("A<" "Ά")
-  ("a<" "ά")
-  ("E<" "Έ")
-  ("e<" "έ")
-  ("H<" "Ή")
-  ("h<" "ή")
-  ("I<" "Ί")
-  ("i<" "ί")
-  ("O<" "Ό")
-  ("o<" "ό")
-  ("U<" "Ύ")
-  ("u<" "ύ")
-  ("W<" "Ώ")
-  ("w<" "ώ")
-  ;("" "Ϊ")
-  ;("" "ϊ")
-  ;("" "Ϋ")
-  ;("" "ϋ")
-  ;("" "ΐ")
-  ;("" "ΰ")
+  ("A`" "Ά")
+  ("a`" "ά")
+  ("E`" "Έ")
+  ("e`" "έ")
+  ("H`" "Ή")
+  ("h`" "ή")
+  ("I`" "Ί")
+  ("i`" "ί")
+  ("O`" "Ό")
+  ("o`" "ό")
+  ("U`" "Ύ")
+  ("u`" "ύ")
+  ("W`" "Ώ")
+  ("w`" "ώ")
+  ("I=" "Ϊ")
+  ("i=" "ϊ")
+  ("U=" "Ϋ")
+  ("u=" "ϋ")
+  ("i=`" "ΐ")
+  ("u=`" "ΰ")
   
   ; punctuation
-  ("." "·")
-  (";" ";")
+  ;("." ".")
+  (";" "·")
+  ;("," ",")
+  ;(":" ":")
+  ("?" ";")
+  ;("!" "!")
+  ("..." "…")
+  ;("(" "(")
+  ;(")" ")")
+  ("<<" "«")
+  (">>" "»")
+  ;("-" "-")
 )
 
-(provide 'jdp-greek)
+(provide 'jdp-ell)

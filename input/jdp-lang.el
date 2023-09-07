@@ -16,15 +16,15 @@
 (require 'jdp-semitic-postfix)
 
 (require 'jdp-ara-buckwalter)
-(require 'jdp-greek)
 (require 'jdp-greek-polytonic)
-(require 'jdp-hebrew)
 (require 'jdp-zho-pinyin)
 
 ;;;; OTHER START ;;;;
 (require 'jdp-bul)
 (require 'jdp-ces)
 (require 'jdp-deu)
+(require 'jdp-ell)
+(require 'jdp-heb)
 (require 'jdp-hin)
 (require 'jdp-hun)
 (require 'jdp-kat)
@@ -51,6 +51,11 @@
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'jdp-deu)
       (setq jdp-ime-transcription nil))
+    ("ell"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-ell)
+      (setq jdp-ime-transcription nil))
     ("fas"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
@@ -72,7 +77,7 @@
     ("heb"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
-      (setq jdp-ime-phrase 'jdp-hebrew)
+      (setq jdp-ime-phrase 'jdp-heb)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
     ("jpn"
       ;(setq bidi-display-reordering nil)
