@@ -24,6 +24,7 @@
 (require 'jdp-ces)
 (require 'jdp-deu)
 (require 'jdp-ell)
+(require 'jdp-fra)
 (require 'jdp-heb)
 (require 'jdp-hin)
 (require 'jdp-hun)
@@ -61,6 +62,11 @@
       (setq bidi-paragraph-direction 'right-to-left)
       (setq jdp-ime-phrase 'farsi-transliterate-banan)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
+    ("fra"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-fra)
+      (setq jdp-ime-transcription nil))
     ("geo"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)

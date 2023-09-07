@@ -106,8 +106,11 @@
         (puthash "phrase" 'jdp-ell jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("fra"
-        (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
+        (puthash "phrase" 'jdp-fra jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ;("fra"
+      ;  (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
+      ;  (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("geo"
         (puthash "phrase" 'georgian jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))

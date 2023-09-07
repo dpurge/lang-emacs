@@ -1,0 +1,43 @@
+(require 'quail)
+
+(quail-define-package
+  "jdp-fra" "UTF-8" "fra<" t
+  "French input method."
+  nil t nil nil nil nil nil nil nil nil t)
+
+(quail-define-rules
+("A`" "À")
+("a`" "à")
+("A^" "Â")
+("a^" "â")
+("A&" "Æ")
+("a&" "æ")
+("C`" "Ç")
+("c`" "ç")
+("E\\" "É")
+("e\\" "é")
+("E`" "È")
+("e`" "è")
+("E^" "Ê")
+("e^" "ê")
+("E=" "Ë")
+("e=" "ë")
+("I^" "Î")
+("i^" "î")
+("I=" "Ï")
+("i=" "ï")
+("O^" "Ô")
+("o^" "ô")
+("O&" "Œ")
+("o&" "œ")
+("U`" "Ù")
+("u`" "ù")
+("U^" "Û")
+("u^" "û")
+("U=" "Ü")
+("u=" "ü")
+("Y=" "Ÿ")
+("y=" "ÿ")
+)
+
+(provide 'jdp-fra)
