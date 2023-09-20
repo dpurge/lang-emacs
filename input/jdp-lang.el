@@ -31,6 +31,7 @@
 (require 'jdp-kat)
 (require 'jdp-lit)
 (require 'jdp-ron)
+(require 'jdp-rus)
 (require 'jdp-srp)
 (require 'jdp-tgk)
 (require 'jdp-vie)
@@ -98,7 +99,8 @@
     ("rus"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
-      (set-input-method 'cyrillic-translit))
+      (setq jdp-ime-phrase 'jdp-rus)
+      (setq jdp-ime-transcription nil))
     ("spa"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)

@@ -121,7 +121,7 @@
         (puthash "phrase" 'devanagari-itrans jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-indic-postfix jdp-lang-mode-ime))
       ("rus"
-        (puthash "phrase" 'cyrillic-translit jdp-lang-mode-ime)
+        (puthash "phrase" 'jdp-rus jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("spa"
         (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
