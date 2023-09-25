@@ -105,6 +105,9 @@
       ("ell"
         (puthash "phrase" 'jdp-ell jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("epo"
+        (puthash "phrase" 'jdp-epo jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("fra"
         (puthash "phrase" 'jdp-fra jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))

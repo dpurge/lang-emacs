@@ -24,6 +24,7 @@
 (require 'jdp-ces)
 (require 'jdp-deu)
 (require 'jdp-ell)
+(require 'jdp-epo)
 (require 'jdp-fra)
 (require 'jdp-heb)
 (require 'jdp-hin)
@@ -57,6 +58,11 @@
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'jdp-ell)
+      (setq jdp-ime-transcription nil))
+    ("epo"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-epo)
       (setq jdp-ime-transcription nil))
     ("fas"
       ;(setq bidi-display-reordering t)
