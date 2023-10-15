@@ -126,6 +126,9 @@
       ("hin"
         (puthash "phrase" 'devanagari-itrans jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-indic-postfix jdp-lang-mode-ime))
+      ("ron"
+        (puthash "phrase" 'jdp-ron jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("rus"
         (puthash "phrase" 'jdp-rus jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))

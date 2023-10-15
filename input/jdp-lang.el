@@ -104,6 +104,11 @@
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'korean-ipa-romaja)
       (setq jdp-ime-transcription nil))
+    ("ron"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-ron)
+      (setq jdp-ime-transcription nil))
     ("rus"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
