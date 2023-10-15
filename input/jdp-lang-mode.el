@@ -117,6 +117,9 @@
       ("geo"
         (puthash "phrase" 'georgian jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("grc"
+        (puthash "phrase" 'jdp-grc jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("heb"
         (puthash "phrase" 'jdp-heb jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))

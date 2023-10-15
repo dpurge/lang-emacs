@@ -26,6 +26,7 @@
 (require 'jdp-ell)
 (require 'jdp-epo)
 (require 'jdp-fra)
+(require 'jdp-grc)
 (require 'jdp-heb)
 (require 'jdp-hin)
 (require 'jdp-hun)
@@ -86,7 +87,8 @@
     ("grc"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
-      (set-input-method 'greek-babel))
+      (setq jdp-ime-phrase 'jdp-grc)
+      (setq jdp-ime-transcription nil))
     ("heb"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
