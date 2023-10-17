@@ -16,7 +16,7 @@
 (require 'jdp-semitic-postfix)
 
 (require 'jdp-ara-buckwalter)
-(require 'jdp-greek-polytonic)
+;(require 'jdp-greek-polytonic)
 (require 'jdp-zho-pinyin)
 
 ;;;; OTHER START ;;;;
@@ -32,6 +32,7 @@
 (require 'jdp-hun)
 (require 'jdp-kat)
 (require 'jdp-lit)
+(require 'jdp-mnc)
 (require 'jdp-ron)
 (require 'jdp-rus)
 (require 'jdp-srp)
@@ -103,6 +104,16 @@
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'korean-ipa-romaja)
+      (setq jdp-ime-transcription nil))
+    ("lit"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-lit)
+      (setq jdp-ime-transcription nil))
+    ("mnc"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-mnc)
       (setq jdp-ime-transcription nil))
     ("ron"
       ;(setq bidi-display-reordering nil)
