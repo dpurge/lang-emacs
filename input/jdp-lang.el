@@ -95,6 +95,11 @@
       (setq bidi-paragraph-direction 'right-to-left)
       (setq jdp-ime-phrase 'jdp-heb)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
+    ("hun"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-hun)
+      (setq jdp-ime-transcription nil))
     ("jpn"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
