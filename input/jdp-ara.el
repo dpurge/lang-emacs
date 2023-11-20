@@ -1,9 +1,9 @@
 (require 'quail)
 
 (quail-define-package
-"jdp-ara-buckwalter" "UTF-8" "Ara<" t
-"Latin transcription for Arabic.
-" nil t nil nil nil nil nil nil nil nil t)
+"jdp-ara" "UTF-8" "ara<" t
+"Arabic input method."
+nil t nil nil nil nil nil nil nil nil t)
 
 (quail-define-rules
 ("'" "ء") ; lone hamza
@@ -57,4 +57,4 @@
 ("," "،")
 )
 
-(provide 'jdp-ara-buckwalter)
+(provide 'jdp-ara)

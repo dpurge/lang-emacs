@@ -15,27 +15,37 @@
 (require 'jdp-indic-postfix)
 (require 'jdp-semitic-postfix)
 
-(require 'jdp-ara-buckwalter)
 ;(require 'jdp-greek-polytonic)
 (require 'jdp-zho-pinyin)
 
 ;;;; OTHER START ;;;;
+(require 'jdp-ara)
+(require 'jdp-aze)
 (require 'jdp-bul)
 (require 'jdp-ces)
+(require 'jdp-dan)
 (require 'jdp-deu)
 (require 'jdp-ell)
 (require 'jdp-epo)
+(require 'jdp-fas)
+(require 'jdp-fin)
 (require 'jdp-fra)
 (require 'jdp-grc)
 (require 'jdp-heb)
 (require 'jdp-hin)
 (require 'jdp-hun)
 (require 'jdp-kat)
+(require 'jdp-kaz)
+(require 'jdp-kir)
+(require 'jdp-lav)
 (require 'jdp-lit)
 (require 'jdp-mnc)
 (require 'jdp-ron)
 (require 'jdp-rus)
 (require 'jdp-srp)
+(require 'jdp-swe)
+(require 'jdp-tat)
+(require 'jdp-tur)
 (require 'jdp-tgk)
 (require 'jdp-vie)
 (require 'jdp-yid)
@@ -49,8 +59,18 @@
     ("ara"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
-      (setq jdp-ime-phrase 'jdp-ara-buckwalter)
+      (setq jdp-ime-phrase 'jdp-ara)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
+    ("aze"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-aze)
+      (setq jdp-ime-transcription nil))
+    ("dan"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-dan)
+      (setq jdp-ime-transcription nil))
     ("deu"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
@@ -69,17 +89,19 @@
     ("fas"
       ;(setq bidi-display-reordering t)
       (setq bidi-paragraph-direction 'right-to-left)
-      (setq jdp-ime-phrase 'farsi-transliterate-banan)
+      ;(setq jdp-ime-phrase 'farsi-transliterate-banan)
+	  (setq jdp-ime-phrase 'jdp-fas)
       (setq jdp-ime-transcription 'jdp-semitic-postfix))
+    ("fin"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-fin)
+      (setq jdp-ime-transcription nil))
     ("fra"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'jdp-fra)
       (setq jdp-ime-transcription nil))
-    ("geo"
-      ;(setq bidi-display-reordering nil)
-      (setq bidi-paragraph-direction 'left-to-right)
-      (set-input-method 'georgian))
     ("ger"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
@@ -105,10 +127,30 @@
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'japanese)
       (setq jdp-ime-transcription nil))
+    ("kat"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-kat)
+      (setq jdp-ime-transcription nil))
+    ("kaz"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-kaz)
+      (setq jdp-ime-transcription nil))
+    ("kir"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-kir)
+      (setq jdp-ime-transcription nil))
     ("kor"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'korean-ipa-romaja)
+      (setq jdp-ime-transcription nil))
+    ("lav"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-lav)
       (setq jdp-ime-transcription nil))
     ("lit"
       ;(setq bidi-display-reordering nil)
@@ -134,6 +176,26 @@
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (set-input-method 'spanish-prefix))
+    ("swe"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-swe)
+      (setq jdp-ime-transcription nil))
+    ("tat"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-tat)
+      (setq jdp-ime-transcription nil))
+    ("tgk"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-tgk)
+      (setq jdp-ime-transcription nil))
+    ("tur"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-tur)
+      (setq jdp-ime-transcription nil))
     ("vie"
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)

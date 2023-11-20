@@ -2,7 +2,6 @@
 (require 'url)
 
 ;(require 'subr-x) ; string-trim
-(require 'jdp-ara-buckwalter)
 (require 'jdp-zho-pinyin)
 
 (require 'chinese-fonts-setup)
@@ -93,12 +92,18 @@
       (jdp-lang-mode-ime (make-hash-table :test 'equal))
     )
     (pcase language
-      ("arb"
-        (puthash "phrase" 'jdp-ara-buckwalter jdp-lang-mode-ime)
+      ("ara"
+        (puthash "phrase" 'jdp-ara jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))
+      ("aze"
+        (puthash "phrase" 'jdp-aze jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("cmn"
         (puthash "phrase" 'eim-py jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-zho-pinyin jdp-lang-mode-ime))
+      ("dan"
+        (puthash "phrase" 'jdp-dan jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("deu"
         (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
@@ -108,14 +113,14 @@
       ("epo"
         (puthash "phrase" 'jdp-epo jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("fas"
+        (puthash "phrase" 'jdp-fas jdp-lang-mode-ime)
+        (puthash "transcription" 'jdp-semitic-postfix jdp-lang-mode-ime))
+      ("fin"
+        (puthash "phrase" 'jdp-fin jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("fra"
         (puthash "phrase" 'jdp-fra jdp-lang-mode-ime)
-        (puthash "transcription" 'nil jdp-lang-mode-ime))
-      ;("fra"
-      ;  (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
-      ;  (puthash "transcription" 'nil jdp-lang-mode-ime))
-      ("geo"
-        (puthash "phrase" 'georgian jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("grc"
         (puthash "phrase" 'jdp-grc jdp-lang-mode-ime)
@@ -129,8 +134,20 @@
       ("hun"
         (puthash "phrase" 'jdp-hun jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("lav"
+        (puthash "phrase" 'jdp-lav jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("lit"
         (puthash "phrase" 'jdp-lit jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("kat"
+        (puthash "phrase" 'jdp-kat jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("kaz"
+        (puthash "phrase" 'jdp-kaz jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("kir"
+        (puthash "phrase" 'jdp-kir jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("mnc"
         (puthash "phrase" 'jdp-mnc jdp-lang-mode-ime)
@@ -144,9 +161,21 @@
       ("spa"
         (puthash "phrase" 'latin-alt-postfix jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
-      ("tur"
-        (puthash "phrase" 'turkish-alt-postfix jdp-lang-mode-ime)
+      ("swe"
+        (puthash "phrase" 'jdp-swe jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("tat"
+        (puthash "phrase" 'jdp-tat jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("tgk"
+        (puthash "phrase" 'jdp-tgk jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("tur"
+        (puthash "phrase" 'jdp-tur jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ;("tur"
+      ;  (puthash "phrase" 'turkish-alt-postfix jdp-lang-mode-ime)
+      ;  (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("vie"
         (puthash "phrase" 'vietnamese-viqr jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
