@@ -34,6 +34,7 @@
 (require 'jdp-heb)
 (require 'jdp-hin)
 (require 'jdp-hun)
+(require 'jdp-ita)
 (require 'jdp-kat)
 (require 'jdp-kaz)
 (require 'jdp-kir)
@@ -121,6 +122,11 @@
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'jdp-hun)
+      (setq jdp-ime-transcription nil))
+    ("ita"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-ita)
       (setq jdp-ime-transcription nil))
     ("jpn"
       ;(setq bidi-display-reordering nil)

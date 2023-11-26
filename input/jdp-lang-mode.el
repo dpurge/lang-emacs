@@ -134,6 +134,9 @@
       ("hun"
         (puthash "phrase" 'jdp-hun jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
+      ("ita"
+        (puthash "phrase" 'jdp-ita jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("lav"
         (puthash "phrase" 'jdp-lav jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))
