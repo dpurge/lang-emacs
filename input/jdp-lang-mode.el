@@ -101,6 +101,9 @@
       ("cmn"
         (puthash "phrase" 'eim-py jdp-lang-mode-ime)
         (puthash "transcription" 'jdp-zho-pinyin jdp-lang-mode-ime))
+      ("crh"
+        (puthash "phrase" 'jdp-crh jdp-lang-mode-ime)
+        (puthash "transcription" 'nil jdp-lang-mode-ime))
       ("dan"
         (puthash "phrase" 'jdp-dan jdp-lang-mode-ime)
         (puthash "transcription" 'nil jdp-lang-mode-ime))

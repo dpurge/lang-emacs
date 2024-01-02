@@ -23,6 +23,7 @@
 (require 'jdp-aze)
 (require 'jdp-bul)
 (require 'jdp-ces)
+(require 'jdp-crh)
 (require 'jdp-dan)
 (require 'jdp-deu)
 (require 'jdp-ell)
@@ -66,6 +67,11 @@
       ;(setq bidi-display-reordering nil)
       (setq bidi-paragraph-direction 'left-to-right)
       (setq jdp-ime-phrase 'jdp-aze)
+      (setq jdp-ime-transcription nil))
+    ("crh"
+      ;(setq bidi-display-reordering nil)
+      (setq bidi-paragraph-direction 'left-to-right)
+      (setq jdp-ime-phrase 'jdp-crh)
       (setq jdp-ime-transcription nil))
     ("dan"
       ;(setq bidi-display-reordering nil)
