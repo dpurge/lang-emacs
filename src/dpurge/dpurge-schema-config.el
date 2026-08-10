@@ -1,0 +1,25 @@
+;;; dpurge-schema-config.el --- Structured block schemas -*- lexical-binding: t; -*-
+
+(defconst dpurge-markdown-block-schemas
+  '((vocabulary :transitions ((phrase . grammar)
+                              (grammar . transcription)
+                              (transcription . translation)
+                              (translation . notes)
+                              (notes . done)))
+    (models :transitions ((phrase . transcription)
+                          (transcription . translation)
+                          (translation . notes)
+                          (notes . done))
+            :insert-templates ((transcription " []" "[]" 2 1)
+                               (translation " = " "= " nil nil)
+                               (notes " ()" "()" 2 1)))
+    (questions :transitions ((question . question-transcription)
+                             (question-transcription . answer)
+                             (answer . answer-transcription)
+                             (answer-transcription . done))
+               :insert-templates ((question-transcription " []" "[]" 2 1)
+                                  (answer " = " "= " nil nil)
+                                  (answer-transcription " []" "[]" 2 1))))
+  "Structured editing schemas for special block types.")
+
+(provide 'dpurge-schema-config)

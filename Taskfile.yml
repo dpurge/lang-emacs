@@ -1,0 +1,121 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install symlinks into the user's Emacs config directory
+    cmds:
+      - |
+        {{if eq OS "windows"}}powershell -NoProfile -ExecutionPolicy Bypass -Command "
+        $repo = (Get-Location).Path
+        $emacsDir = Join-Path $env:APPDATA '.emacs.d'
+        New-Item -ItemType Directory -Force -Path $emacsDir | Out-Null
+        $links = @(
+          @{ Link = (Join-Path $emacsDir 'init.el');   Target = (Join-Path $repo 'src/init.el') },
+          @{ Link = (Join-Path $emacsDir 'dpurge.el'); Target = (Join-Path $repo 'src/dpurge.el') },
+          @{ Link = (Join-Path $emacsDir 'dpurge');    Target = (Join-Path $repo 'src/dpurge') }
+        )
+        $publicTarget = Join-Path $repo 'old/public'
+        if (Test-Path $publicTarget) {
+          $links += @{ Link = (Join-Path $emacsDir 'public'); Target = $publicTarget }
+        }
+        foreach ($item in $links) {
+          if (Test-Path $item.Link -PathType Any) { Remove-Item -Force -Recurse $item.Link }
+          New-Item -ItemType SymbolicLink -Path $item.Link -Target $item.Target | Out-Null
+        }
+        Set-Content -Path (Join-Path $HOME '.emacs') -Value '(load (expand-file-name "~/.emacs.d/init.el") nil t)'
+        "{{else}}sh -c '
+        set -eu
+        repo="$PWD"
+        emacs_dir="$HOME/.emacs.d"
+        mkdir -p "$emacs_dir"
+        ln -sfn "$repo/src/init.el" "$emacs_dir/init.el"
+        ln -sfn "$repo/src/dpurge.el" "$emacs_dir/dpurge.el"
+        ln -sfn "$repo/src/dpurge" "$emacs_dir/dpurge"
+        if [ -d "$repo/old/public" ]; then
+          ln -sfn "$repo/old/public" "$emacs_dir/public"
+        fi
+        printf "%s\n" "(load (expand-file-name \"~/.emacs.d/init.el\") nil t)" > "$HOME/.emacs"
+        '{{end}}
+
+  uninstall:
+    desc: Remove installed Emacs symlinks created by this repo
+    cmds:
+      - |
+        {{if eq OS "windows"}}powershell -NoProfile -ExecutionPolicy Bypass -Command "
+        $emacsDir = Join-Path $env:APPDATA '.emacs.d'
+        foreach ($path in @(
+          (Join-Path $emacsDir 'init.el'),
+          (Join-Path $emacsDir 'dpurge.el'),
+          (Join-Path $emacsDir 'dpurge'),
+          (Join-Path $emacsDir 'public')
+        )) {
+          if (Test-Path $path -PathType Any) { Remove-Item -Force -Recurse $path }
+        }
+        $emacsFile = Join-Path $HOME '.emacs'
+        if (Test-Path $emacsFile -PathType Leaf) { Remove-Item -Force $emacsFile }
+        "{{else}}sh -c '
+        set -eu
+        emacs_dir="$HOME/.emacs.d"
+        rm -rf "$emacs_dir/init.el" "$emacs_dir/dpurge.el" "$emacs_dir/dpurge" "$emacs_dir/public"
+        rm -f "$HOME/.emacs"
+        '{{end}}
+
+  doctor:
+    desc: Verify expected Emacs symlinks and targets
+    cmds:
+      - |
+        {{if eq OS "windows"}}powershell -NoProfile -ExecutionPolicy Bypass -Command "
+        $repo = (Get-Location).Path
+        $emacsDir = Join-Path $env:APPDATA '.emacs.d'
+        $checks = @(
+          @{ Path = (Join-Path $emacsDir 'init.el');   Target = (Join-Path $repo 'src/init.el') },
+          @{ Path = (Join-Path $emacsDir 'dpurge.el'); Target = (Join-Path $repo 'src/dpurge.el') },
+          @{ Path = (Join-Path $emacsDir 'dpurge');    Target = (Join-Path $repo 'src/dpurge') }
+        )
+        $publicTarget = Join-Path $repo 'old/public'
+        if (Test-Path $publicTarget) {
+          $checks += @{ Path = (Join-Path $emacsDir 'public'); Target = $publicTarget }
+        }
+        foreach ($check in $checks) {
+          if (-not (Test-Path $check.Path -PathType Any)) { throw "Missing: $($check.Path)" }
+          $item = Get-Item -Force $check.Path
+          $target = $item.Target
+          if ($null -eq $target -or $target -ne $check.Target) {
+            throw "Unexpected target for $($check.Path): $target" }
+        }
+        $emacsFile = Join-Path $HOME '.emacs'
+        if (-not (Test-Path $emacsFile -PathType Leaf)) { throw "Missing: $emacsFile" }
+        $content = Get-Content $emacsFile -Raw
+        if ($content -notmatch '\(load \(expand-file-name "~/.emacs.d/init.el"\) nil t\)') {
+          throw "Unexpected ~/.emacs content" }
+        Write-Host 'doctor ok'
+        "{{else}}sh -c '
+        set -eu
+        repo="$PWD"
+        emacs_dir="$HOME/.emacs.d"
+        check_link() {
+          path="$1"; expected="$2"
+          [ -L "$path" ] || { echo "Missing or not symlink: $path" >&2; exit 1; }
+          target=$(readlink "$path")
+          [ "$target" = "$expected" ] || { echo "Unexpected target for $path: $target" >&2; exit 1; }
+        }
+        check_link "$emacs_dir/init.el" "$repo/src/init.el"
+        check_link "$emacs_dir/dpurge.el" "$repo/src/dpurge.el"
+        check_link "$emacs_dir/dpurge" "$repo/src/dpurge"
+        if [ -d "$repo/old/public" ]; then
+          check_link "$emacs_dir/public" "$repo/old/public"
+        fi
+        [ -f "$HOME/.emacs" ] || { echo "Missing $HOME/.emacs" >&2; exit 1; }
+        grep -Fqx '(load (expand-file-name "~/.emacs.d/init.el") nil t)' "$HOME/.emacs" || { echo "Unexpected ~/.emacs content" >&2; exit 1; }
+        echo doctor ok
+        '{{end}}
+
+  test:
+    desc: Run ERT tests for the Markdown integration
+    cmds:
+      - emacs --batch -Q -L ./src/dpurge -L ./src/dpurge/ime -l test/run-tests.el -f ert-run-tests-batch-and-exit
+
+  default:
+    desc: Run tests
+    cmds:
+      - task: test

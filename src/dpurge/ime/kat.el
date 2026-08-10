@@ -1,0 +1,43 @@
+(require 'quail)
+
+(quail-define-package
+  "dpurge-kat" "UTF-8" "kat<" t
+  "Georgian input method."
+  nil t nil nil nil nil nil nil nil nil t)
+
+(quail-define-rules
+ ("a" "ა")
+ ("b" "ბ")
+ ("g" "გ")
+ ("d" "დ")
+ ("e" "ე")
+ ("v" "ვ")
+ ("z" "ზ")
+ ("t" "თ")
+ ("i" "ი")
+ ("K" "კ")
+ ("l" "ლ")
+ ("m" "მ")
+ ("n" "ნ")
+ ("o" "ო")
+ ("P" "პ")
+ ("zh" "ჟ")
+ ("r" "რ")
+ ("s" "ს")
+ ("T" "ტ")
+ ("u" "უ")
+ ("p" "ფ")
+ ("k" "ქ")
+ ("gh" "ღ")
+ ("Q" "ყ")
+ ("sh" "შ")
+ ("ch" "ჩ")
+ ("ts" "ც")
+ ("dz" "ძ")
+ ("Ts" "წ")
+ ("Ch" "ჭ")
+ ("kh" "ხ")
+ ("j" "ჯ")
+ ("h" "ჰ"))
+
+(provide 'dpurge-kat)
