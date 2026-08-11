@@ -47,6 +47,7 @@ Structured Markdown blocks currently supported:
 - `questions`
 - `text` with `as=source|transcription|translation|grammar`
 - `dialog` with `as=source|transcription|translation|grammar`
+- `parallel`
 
 Field/IME behavior is split like this:
 - block schema transitions: `src/dpurge/dpurge-schema-config.el`
@@ -76,6 +77,7 @@ Structured state variables are now markdown-generic, not vocabulary-specific.
   - `answer-transcription`
 - `text` and `dialog` blocks do not use tab-cycling, only IME switching by `as=`.
 - When block support changes, update `README.md` and `AGENTS.md` together so the docs stay aligned.
+- `parallel` fields are **multi-line**: field boundaries are lone `---` lines (exactly `^---$`) and record boundaries are lone `===` lines (exactly `^===$`). These are NOT markdown thematic breaks (`***`, `----`, `- - -` etc.) — only the exact 3-character forms count, matching the cli-tools parser byte-for-byte. The `transcription` (and `translation`) fields in parallel blocks are force-pinned **left-to-right** via the schema `:field-directions` key, even when the source language is RTL. This override is `parallel`-only; vocabulary/models/questions/text/dialog are unaffected.
 - Windows install uses PowerShell symlinks; Unix install uses `ln -sfn`.
 
 ## Preferred next-step style

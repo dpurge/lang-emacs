@@ -130,7 +130,7 @@ checks the current block and updates the buffer-local state.
 
 Behavior:
 
-- inside structured entry blocks (`vocabulary`, `models`, `questions`): enable `dpurge-markdown-edit-mode`
+- inside structured entry blocks (`vocabulary`, `models`, `questions`, `parallel`): enable `dpurge-markdown-edit-mode`; in `parallel` blocks, `TAB` inserts the next `---` field separator and `M-RET` starts a new `===` record; `translation` and `transcription` fields are both forced left-to-right regardless of source script
 - inside text-like blocks (`text`, `dialog`): keep block metadata and update IME state from `as=`
 - outside special blocks: disable the minor mode and clear local state
 
@@ -255,6 +255,33 @@ Field order:
 - `transcription` → transcription IME
 - `translation` → no IME
 - `grammar` → no IME
+
+### Parallel
+
+```md
+{start-parallel lang=ara script=arab}
+مرحبا
+---
+hello
+---
+marhaba
+===
+شكرا
+---
+thanks
+{end-parallel}
+```
+
+A record splits on every lone `---` line into up to three fields — **source**,
+**translation**, **transcription** (the last two optional). Records are
+separated by a lone `===` line. Field-driven behavior:
+
+- `source` → the marker's `lang=`/`script=` IME, font, and text direction
+- `translation` → no IME (book language), text direction **forced left-to-right** regardless of the source's own script
+- `transcription` → the source language's transcription IME, text direction **forced left-to-right**
+
+`TAB` inserts the next `---` field separator and moves into it; `M-RET` starts a
+new record (`===`). A 4th+ `---` field is absorbed into the transcription.
 
 ## Typical control flow
 

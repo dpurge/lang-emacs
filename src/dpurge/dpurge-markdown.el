@@ -30,6 +30,7 @@
 (defvar dpurge-markdown-edit-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "TAB") #'dpurge-markdown-tab)
+    (define-key map (kbd "M-RET") #'dpurge-markdown-meta-ret)
     map)
   "Keymap for `dpurge-markdown-edit-mode'.")
 
@@ -172,7 +173,11 @@ Returns a plist, or nil when point is outside a block."
          (config (dpurge-markdown-language-settings lang script))
          (field-config (dpurge-markdown-field-settings
                         lang script effective-field))
-         (direction (plist-get config :direction))
+         (field-directions (plist-get (dpurge-markdown-block-schema
+                                       dpurge-markdown-block-type)
+                                      :field-directions))
+         (override-dir (alist-get effective-field field-directions))
+         (direction (or override-dir (plist-get config :direction)))
          (input-method (plist-get field-config :input-method))
          (input-method-file (plist-get field-config :input-method-file))
          (font (or (plist-get field-config :font)
@@ -199,7 +204,7 @@ Returns a plist, or nil when point is outside a block."
   "Apply editing setup for FIELD."
   (setq-local dpurge-markdown-current-field-state field)
   (setq-local dpurge-questions-current-field field)
-  (when (and (memq dpurge-markdown-block-type '(vocabulary models questions text dialog))
+  (when (and (memq dpurge-markdown-block-type '(vocabulary models questions text dialog parallel))
              field
              (not (eq field 'done)))
     (dpurge-vocabulary-apply-field-settings field)))
@@ -214,6 +219,34 @@ Returns a plist, or nil when point is outside a block."
    (t nil)))
 
 
+(defun dpurge-parallel-current-field ()
+  "Return the current field within a parallel block by scanning backward.
+
+Counts lone `---' separator lines above point's line since the
+nearest record start (`===' line or `{start-parallel...}' opener).
+Returns `phrase', `translation', or `transcription'."
+  (save-excursion
+    (let* ((line-start (line-beginning-position))
+           (boundary
+            (progn
+              (goto-char line-start)
+              (if (re-search-backward
+                   "^===$\\|^{start-parallel[^}]*}$"
+                   nil t)
+                  (line-beginning-position 2)
+                (point-min))))
+           (count 0))
+      (save-excursion
+        (goto-char boundary)
+        (while (< (point) line-start)
+          (when (looking-at "^---$")
+            (setq count (1+ count)))
+          (forward-line 1)))
+      (pcase (min count 2)
+        (0 'phrase)
+        (1 'translation)
+        (_ 'transcription)))))
+
 (defun dpurge-markdown-current-field ()
   "Return the current editable field based on block type and point."
   (cond
@@ -225,6 +258,8 @@ Returns a plist, or nil when point is outside a block."
     (dpurge-questions-point-field (dpurge-questions-line-info)))
    ((memq dpurge-markdown-block-type '(text dialog))
     (dpurge-markdown-text-field-for-as dpurge-markdown-block-as))
+   ((eq dpurge-markdown-block-type 'parallel)
+    (dpurge-parallel-current-field))
    (t nil)))
 
 (defun dpurge-markdown-clear-structured-state ()
@@ -242,7 +277,7 @@ Returns a plist, or nil when point is outside a block."
 
 (defun dpurge-markdown-structured-block-p (type)
   "Return non-nil when TYPE supports structured field navigation."
-  (memq type '(vocabulary models questions)))
+  (memq type '(vocabulary models questions parallel)))
 
 
 (defun dpurge-markdown-apply-current-block (block)
@@ -661,20 +696,151 @@ Returns a plist, or nil when point is outside a block."
     ('notes (goto-char (1+ (car (plist-get info 'notes))))))
   (dpurge-vocabulary-setup-field-editing field))
 
+(defun dpurge-parallel-new-record ()
+  "Finish the current parallel record and start a new one.
+
+Inserts a lone `===' separator at the end of the current field
+(regardless of where point sits within the field) and enters the
+new source field (`phrase').  Guards on block type so it is safe
+to call from the M-RET dispatcher."
+  (unless (eq dpurge-markdown-block-type 'parallel)
+    (user-error "Not inside a parallel block"))
+  (let* ((fstart (dpurge-parallel-field-start))
+         (fend (dpurge-parallel-field-end fstart)))
+    (goto-char fend)
+    (insert "\n===\n")
+    (dpurge-vocabulary-setup-field-editing 'phrase)))
+
+(defun dpurge-markdown-meta-ret ()
+  "M-RET dispatcher: new record in parallel blocks, fallthrough elsewhere."
+  (interactive)
+  (if (eq dpurge-markdown-block-type 'parallel)
+      (dpurge-parallel-new-record)
+    (let ((dpurge-markdown-edit-mode nil))
+      (call-interactively (key-binding (kbd "M-RET"))))))
+
+(defun dpurge-parallel-field-end (field-start)
+  "Return the position at the end of the parallel field that begins at FIELD-START.
+
+Scans forward from FIELD-START to just before the next lone `---',
+`===' separator, or `{end-parallel}' line.  The returned position is
+the end of the last content line of the current field, regardless of
+where point currently sits within the field."
+  (save-excursion
+    (goto-char field-start)
+    (let ((result field-start))
+      (while (and (not (eobp))
+                  (not (looking-at "^---$"))
+                  (not (looking-at "^===$"))
+                  (not (looking-at "^{end-parallel}$")))
+        (setq result (line-end-position))
+        (forward-line 1))
+      result)))
+
+(defun dpurge-parallel-field-start ()
+  "Return the start of the current parallel field.
+
+Scans backward to the nearest record start or block opener, then
+forward past the `---' separators already crossed, landing on the
+first line of the current field."
+  (save-excursion
+    (let* ((line-start (line-beginning-position))
+           (boundary
+            (progn
+              (goto-char line-start)
+              (if (re-search-backward
+                   "^===$\\|^{start-parallel[^}]*}$"
+                   nil t)
+                  (line-beginning-position 2)
+                (point-min))))
+           (count 0)
+           (pos boundary))
+      (save-excursion
+        (goto-char boundary)
+        (while (< (point) line-start)
+          (when (looking-at "^---$")
+            (setq count (1+ count)))
+          (forward-line 1)))
+      (setq count (min count 2))
+      ;; Now walk forward from boundary past `count' separators to find field start
+      (goto-char pos)
+      (let ((remaining count))
+        (while (and (> remaining 0) (not (eobp)))
+          (when (looking-at "^---$")
+            (setq remaining (1- remaining))
+            (forward-line 1)
+            (setq pos (point)))
+          (unless (looking-at "^---$")
+            (forward-line 1))))
+      pos)))
+
+(defun dpurge-parallel-next-field ()
+  "Advance to the next field in a parallel block, inserting `---' as needed."
+  (unless (eq dpurge-markdown-block-type 'parallel)
+    (user-error "Not inside a parallel block"))
+  (let* ((field (dpurge-parallel-current-field))
+         (next (dpurge-markdown-next-field-name 'parallel field))
+         (fstart (dpurge-parallel-field-start))
+         (fend (dpurge-parallel-field-end fstart)))
+    (if (eq next 'done)
+        ;; Code-review fix: `dpurge-markdown-finish-field-editing' is SHARED
+        ;; with vocabulary/models/questions and moves to (line-end-position)
+        ;; of point's OWN line -- correct for those single-line fields, but
+        ;; wrong for parallel's (possibly multi-line) transcription: it would
+        ;; leave point mid-field instead of at the field's real end. Move to
+        ;; the real field end first (no shared-function behavior change).
+        (progn
+          (goto-char fend)
+          (dpurge-vocabulary-setup-field-editing 'done))
+      (progn
+        (goto-char fend)
+        (insert "\n---\n")
+        (dpurge-vocabulary-setup-field-editing next)))))
+
 (defun dpurge-markdown-end-marker-line-p ()
   "Return non-nil when point is on a supported block end marker line."
   (save-excursion
     (beginning-of-line)
     (or (looking-at-p "^{end-vocabulary}$")
         (looking-at-p "^{end-models}$")
-        (looking-at-p "^{end-questions}$"))))
+        (looking-at-p "^{end-questions}$")
+        (looking-at-p "^{end-parallel}$"))))
 
 (defun dpurge-markdown-open-entry-line ()
   "Create a new empty entry line before a supported block end marker."
+  (if (eq dpurge-markdown-block-type 'parallel)
+      (dpurge-markdown-open-parallel-entry-line)
+    (beginning-of-line)
+    (open-line 1)
+    (dpurge-markdown-update-block-mode)
+    (dpurge-vocabulary-setup-field-editing 'phrase)))
+
+(defun dpurge-markdown-open-parallel-entry-line ()
+  "Open a new source line before `{end-parallel}', inserting `===' if needed."
   (beginning-of-line)
-  (open-line 1)
-  (dpurge-markdown-update-block-mode)
-  (dpurge-vocabulary-setup-field-editing 'phrase))
+  ;; Check if the block already has record content above the end marker.
+  (let ((prev-non-blank
+         (save-excursion
+           (forward-line -1)
+           (while (and (not (bobp))
+                       (looking-at "^[[:space:]]*$"))
+             (forward-line -1))
+           (buffer-substring-no-properties
+            (line-beginning-position)
+            (line-end-position)))))
+    (if (or (string-match-p "^{start-parallel" prev-non-blank)
+            (string= prev-non-blank ""))
+        ;; Empty block: just open a blank line before {end-parallel}
+        (progn
+          (open-line 1)
+          (dpurge-markdown-update-block-mode)
+          (dpurge-vocabulary-setup-field-editing 'phrase))
+      ;; Non-empty block: insert `===' separator + blank line unless already ===
+      (unless (string= prev-non-blank "===")
+        (insert "===\n"))
+      (open-line 1)
+      (dpurge-markdown-update-block-mode)
+      (dpurge-vocabulary-setup-field-editing 'phrase))))
 
 (defun dpurge-markdown-tab ()
   "Handle TAB in Markdown buffers, including structured block editing."
@@ -684,6 +850,7 @@ Returns a plist, or nil when point is outside a block."
    ((eq dpurge-markdown-block-type 'vocabulary) (dpurge-vocabulary-next-field))
    ((eq dpurge-markdown-block-type 'models) (dpurge-model-next-field))
    ((eq dpurge-markdown-block-type 'questions) (dpurge-questions-next-field))
+   ((eq dpurge-markdown-block-type 'parallel) (dpurge-parallel-next-field))
    ((and (derived-mode-p 'markdown-mode) (commandp dpurge-markdown-tab-fallback))
     (call-interactively dpurge-markdown-tab-fallback))
    ((and (derived-mode-p 'markdown-ts-mode) (commandp dpurge-markdown-ts-tab-fallback))

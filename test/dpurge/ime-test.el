@@ -525,3 +525,103 @@
     (dpurge-markdown-update-block-mode)
     (should (eq dpurge-markdown-current-field-state 'answer-transcription))
     (should (equal dpurge-markdown-current-input-method "dpurge-zho-pinyin"))))
+
+;; S4: §8.2 Direction / IME tests for parallel blocks
+
+(defmacro dpurge-test-with-parallel-ime-buffer (lang script content &rest body)
+  "Run BODY in a parallel block with LANG, SCRIPT, and CONTENT at line 1."
+  (declare (indent 3))
+  `(with-temp-buffer
+     (insert (format "{start-parallel lang=%s script=%s}\n%s\n{end-parallel}\n"
+                     ,lang ,script ,content))
+     (markdown-mode)
+     (goto-char (point-min))
+     (forward-line 1)
+     (run-hooks 'markdown-mode-hook)
+     ,@body))
+
+(ert-deftest dpurge-parallel-arabic-source-field-is-rtl ()
+  (dpurge-test-with-parallel-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "مرحبا")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal dpurge-markdown-current-input-method "dpurge-ara"))
+    (should (equal bidi-paragraph-direction 'right-to-left))))
+
+(ert-deftest dpurge-parallel-arabic-transcription-field-is-forced-ltr ()
+  (dpurge-test-with-parallel-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "marhaba")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal dpurge-markdown-current-input-method "dpurge-semitic-postfix"))
+    (should (equal bidi-paragraph-direction 'left-to-right))))
+
+(ert-deftest dpurge-parallel-hebrew-transcription-field-is-forced-ltr ()
+  (dpurge-test-with-parallel-ime-buffer "heb" "hebr" "שלום\n---\nhello\n---\nshalom"
+    (goto-char (point-min))
+    (search-forward "shalom")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal bidi-paragraph-direction 'left-to-right))))
+
+(ert-deftest dpurge-parallel-latin-source-field-is-ltr ()
+  (dpurge-test-with-parallel-ime-buffer "fra" "latn" "bonjour\n---\nhello\n---\nbonzhur"
+    (goto-char (point-min))
+    (search-forward "bonjour")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal bidi-paragraph-direction 'left-to-right))
+    ;; Code-review addition (Phase 10): the RTL source tests (ara/heb below)
+    ;; all assert the configured input-method too; this test previously
+    ;; only checked field-state/direction, leaving a Latin-source IME
+    ;; activation regression uncaught here specifically.
+    (should (equal dpurge-markdown-current-input-method "dpurge-fra"))))
+
+(ert-deftest dpurge-parallel-translation-field-clears-ime ()
+  ;; In an RTL-source parallel block, translation -> IME nil AND direction LTR (D5)
+  (dpurge-test-with-parallel-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'translation))
+    (should (equal dpurge-markdown-current-input-method nil))
+    (should (equal bidi-paragraph-direction 'left-to-right))))
+
+(ert-deftest dpurge-vocabulary-transcription-still-inherits-block-direction ()
+  ;; Hebrew VOCABULARY transcription still yields right-to-left (SR-2/SR-7 non-regression:
+  ;; the :field-directions override is parallel-only).
+  (with-temp-buffer
+    (insert "{start-vocabulary lang=heb script=hebr}\nשלום {} [šālōm] = peace\n{end-vocabulary}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 1)
+    (run-hooks 'markdown-mode-hook)
+    (search-forward "šālōm")
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal bidi-paragraph-direction 'right-to-left))))
+
+(ert-deftest dpurge-models-transcription-still-inherits-block-direction ()
+  ;; Code-review addition (Phase 10): SR-7 claims non-regression for
+  ;; vocabulary/models/questions/text/dialog, but only vocabulary had an
+  ;; explicit RTL-direction test. Hebrew MODELS transcription still yields
+  ;; right-to-left -- the :field-directions override added for parallel
+  ;; must be a structural no-op here too (models' schema entry has no
+  ;; :field-directions key at all).
+  (with-temp-buffer
+    (insert "{start-models lang=heb script=hebr}\nשלום [šālōm] = peace\n{end-models}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 1)
+    (run-hooks 'markdown-mode-hook)
+    (search-forward "šālōm")
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal bidi-paragraph-direction 'right-to-left))))
