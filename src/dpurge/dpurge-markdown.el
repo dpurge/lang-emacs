@@ -708,7 +708,7 @@ to call from the M-RET dispatcher."
   (let* ((fstart (dpurge-parallel-field-start))
          (fend (dpurge-parallel-field-end fstart)))
     (goto-char fend)
-    (insert "\n===\n")
+    (insert "\n\n===\n\n")
     (dpurge-vocabulary-setup-field-editing 'phrase)))
 
 (defun dpurge-markdown-meta-ret ()

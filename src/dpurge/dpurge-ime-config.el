@@ -9,6 +9,23 @@
               (grammar :input-method nil)
               (translation :input-method nil)
               (notes :input-method nil)))
+    (("arz" "arab")
+     :direction right-to-left
+     :fields ((phrase :input-method "dpurge-ara" :input-method-file "ara")
+              (transcription :input-method "dpurge-semitic-postfix"
+                             :input-method-file "semitic-postfix")
+              (grammar :input-method nil)
+              (translation :input-method nil)
+              (notes :input-method nil)))
+    (("arz" "latn")
+     :direction left-to-right
+     :fields ((phrase :input-method "dpurge-semitic-postfix"
+                      :input-method-file "semitic-postfix")
+              (transcription :input-method "dpurge-semitic-postfix"
+                             :input-method-file "semitic-postfix")
+              (grammar :input-method nil)
+              (translation :input-method nil)
+              (notes :input-method nil)))
     (("aze" "latn")
      :direction left-to-right
      :fields ((phrase :input-method "dpurge-aze" :input-method-file "aze")
