@@ -594,6 +594,51 @@
     (should (equal dpurge-markdown-current-input-method nil))
     (should (equal bidi-paragraph-direction 'left-to-right))))
 
+;; S4b: §8.2 parallel-dialog shares parallel's :field-directions schema
+;; entry (dpurge-schema-config.el), so the same forced-LTR/RTL-source
+;; behavior must hold under `{start-parallel-dialog}'.
+
+(defmacro dpurge-test-with-parallel-dialog-ime-buffer (lang script content &rest body)
+  "Run BODY in a parallel-dialog block with LANG, SCRIPT, and CONTENT at line 1."
+  (declare (indent 3))
+  `(with-temp-buffer
+     (insert (format "{start-parallel-dialog lang=%s script=%s}\n%s\n{end-parallel-dialog}\n"
+                     ,lang ,script ,content))
+     (markdown-mode)
+     (goto-char (point-min))
+     (forward-line 1)
+     (run-hooks 'markdown-mode-hook)
+     ,@body))
+
+(ert-deftest dpurge-parallel-dialog-arabic-source-field-is-rtl ()
+  (dpurge-test-with-parallel-dialog-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "مرحبا")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal dpurge-markdown-current-input-method "dpurge-ara"))
+    (should (equal bidi-paragraph-direction 'right-to-left))))
+
+(ert-deftest dpurge-parallel-dialog-arabic-transcription-field-is-forced-ltr ()
+  (dpurge-test-with-parallel-dialog-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "marhaba")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal bidi-paragraph-direction 'left-to-right))))
+
+(ert-deftest dpurge-parallel-dialog-translation-field-clears-ime ()
+  (dpurge-test-with-parallel-dialog-ime-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'translation))
+    (should (equal dpurge-markdown-current-input-method nil))
+    (should (equal bidi-paragraph-direction 'left-to-right))))
+
 (ert-deftest dpurge-vocabulary-transcription-still-inherits-block-direction ()
   ;; Hebrew VOCABULARY transcription still yields right-to-left (SR-2/SR-7 non-regression:
   ;; the :field-directions override is parallel-only).

@@ -472,7 +472,7 @@
     (dpurge-parallel-new-record)
     (should (eq dpurge-markdown-current-field-state 'phrase))
     (should (equal (buffer-string)
-                   "{start-parallel lang=ara script=arab}\nمرحبا\n---\nhello\n===\n\n{end-parallel}\n"))))
+                   "{start-parallel lang=ara script=arab}\nمرحبا\n---\nhello\n\n===\n\n\n{end-parallel}\n"))))
 
 (ert-deftest dpurge-parallel-meta-ret-dispatches-to-new-record-in-parallel-block ()
   ;; Code-review addition (Phase 10): the companion of
@@ -492,7 +492,165 @@
     (dpurge-markdown-meta-ret)
     (should (eq dpurge-markdown-current-field-state 'phrase))
     (should (equal (buffer-string)
-                   "{start-parallel lang=ara script=arab}\nمرحبا\n---\nhello\n===\n\n{end-parallel}\n"))))
+                   "{start-parallel lang=ara script=arab}\nمرحبا\n---\nhello\n\n===\n\n\n{end-parallel}\n"))))
+
+;; S7: §8.x parallel-dialog shares parallel's block grammar/behavior exactly
+;; (same row/field separators, same TAB/M-RET/field-detection code paths --
+;; see dpurge-markdown-block-type memq widenings). Low-level parsing edge
+;; cases (fuzzy-break rejection, 4th-field absorption, mid-field TAB, etc.)
+;; are exercised once by the `parallel' suite above against the SAME shared
+;; functions (`dpurge-parallel-current-field'/`-field-start'/`-field-end');
+;; this section instead covers every call site that had to widen its type
+;; check from `parallel' to `(parallel parallel-dialog)'.
+
+(defmacro dpurge-test-with-parallel-dialog-buffer (lang script content &rest body)
+  "Run BODY in a parallel-dialog block buffer with LANG, SCRIPT, and CONTENT."
+  (declare (indent 3))
+  `(with-temp-buffer
+     (insert (format "{start-parallel-dialog lang=%s script=%s}\n%s\n{end-parallel-dialog}\n"
+                     ,lang ,script ,content))
+     (markdown-mode)
+     (goto-char (point-min))
+     (forward-line 1)
+     (run-hooks 'markdown-mode-hook)
+     ,@body))
+
+(ert-deftest dpurge-parallel-dialog-field-detection-source ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "مرحبا")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'phrase))))
+
+(ert-deftest dpurge-parallel-dialog-field-detection-translation ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'translation))))
+
+(ert-deftest dpurge-parallel-dialog-field-detection-transcription ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "marhaba")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'transcription))))
+
+(ert-deftest dpurge-parallel-dialog-field-detection-second-record ()
+  ;; Proves the shared `===' boundary regex still resolves record
+  ;; boundaries correctly under the `{start-parallel-dialog...}' opener.
+  (with-temp-buffer
+    (insert "{start-parallel-dialog lang=ara script=arab}\nfirst\n---\nfirst-tr\n===\nsecond\n---\nsecond-tr\n{end-parallel-dialog}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 1)
+    (run-hooks 'markdown-mode-hook)
+    (goto-char (point-min))
+    (search-forward "second")
+    (backward-char)
+    (dpurge-markdown-update-block-mode)
+    (should (eq dpurge-markdown-current-field-state 'phrase))))
+
+(ert-deftest dpurge-markdown-structured-block-p-includes-parallel-dialog ()
+  (should (dpurge-markdown-structured-block-p 'parallel-dialog)))
+
+(ert-deftest dpurge-parallel-dialog-edit-mode-activates-inside-block ()
+  (with-temp-buffer
+    (insert "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n{end-parallel-dialog}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 1)
+    (run-hooks 'markdown-mode-hook)
+    (should dpurge-markdown-edit-mode)
+    (should (eq dpurge-markdown-block-type 'parallel-dialog))
+    (should (equal dpurge-markdown-block-lang "ara"))
+    (should (equal dpurge-markdown-block-script "arab"))))
+
+(ert-deftest dpurge-parallel-dialog-tab-source-inserts-separator-and-enters-translation ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا"
+    (goto-char (line-end-position))
+    (call-interactively #'dpurge-markdown-tab)
+    (should (eq dpurge-markdown-current-field-state 'translation))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n---\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-tab-translation-inserts-separator-and-enters-transcription ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (call-interactively #'dpurge-markdown-tab)
+    (should (eq dpurge-markdown-current-field-state 'transcription))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n---\nhello\n---\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-tab-transcription-finishes ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello\n---\nmarhaba"
+    (goto-char (point-min))
+    (search-forward "marhaba")
+    (call-interactively #'dpurge-markdown-tab)
+    (should (eq dpurge-markdown-current-field-state 'done))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n---\nhello\n---\nmarhaba\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-tab-on-end-marker-opens-first-record ()
+  ;; Proves `dpurge-markdown-end-marker-line-p' recognizes
+  ;; `{end-parallel-dialog}' (it did not before this change).
+  (with-temp-buffer
+    (insert "{start-parallel-dialog lang=ara script=arab}\n{end-parallel-dialog}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 1)
+    (run-hooks 'markdown-mode-hook)
+    (call-interactively #'dpurge-markdown-tab)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-tab-on-end-marker-with-existing-record-inserts-separator ()
+  (with-temp-buffer
+    (insert "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n{end-parallel-dialog}\n")
+    (markdown-mode)
+    (goto-char (point-min))
+    (forward-line 2)
+    (run-hooks 'markdown-mode-hook)
+    (call-interactively #'dpurge-markdown-tab)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n===\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-new-record-inserts-record-separator ()
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (dpurge-markdown-update-block-mode)
+    (dpurge-parallel-new-record)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n---\nhello\n\n===\n\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-meta-ret-dispatches-to-new-record ()
+  ;; Companion of `dpurge-parallel-meta-ret-dispatches-to-new-record-in-parallel-block':
+  ;; proves the M-RET dispatcher's IF branch also fires for parallel-dialog
+  ;; blocks, not just plain parallel ones.
+  (dpurge-test-with-parallel-dialog-buffer "ara" "arab" "مرحبا\n---\nhello"
+    (goto-char (point-min))
+    (search-forward "hello")
+    (dpurge-markdown-update-block-mode)
+    (dpurge-markdown-meta-ret)
+    (should (eq dpurge-markdown-current-field-state 'phrase))
+    (should (equal (buffer-string)
+                   "{start-parallel-dialog lang=ara script=arab}\nمرحبا\n---\nhello\n\n===\n\n\n{end-parallel-dialog}\n"))))
+
+(ert-deftest dpurge-parallel-dialog-next-field-name-uses-own-schema ()
+  ;; Proves `dpurge-parallel-next-field' looks up the schema for the ACTUAL
+  ;; block type instead of the hardcoded `parallel' symbol (regression guard
+  ;; for the fix that made this generic).
+  (should (eq (dpurge-markdown-next-field-name 'parallel-dialog 'phrase) 'translation))
+  (should (eq (dpurge-markdown-next-field-name 'parallel-dialog 'translation) 'transcription))
+  (should (eq (dpurge-markdown-next-field-name 'parallel-dialog 'transcription) 'done)))
 
 (ert-deftest dpurge-parallel-meta-ret-noop-in-vocabulary ()
   ;; Genuine SR-7 proof: in a vocabulary block, `dpurge-markdown-meta-ret'

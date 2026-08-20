@@ -24,7 +24,12 @@
                             (translation . transcription)
                             (transcription . done))
               :field-directions ((translation . left-to-right)
-                                 (transcription . left-to-right))))
+                                 (transcription . left-to-right)))
+    (parallel-dialog :transitions ((phrase . translation)
+                                   (translation . transcription)
+                                   (transcription . done))
+                     :field-directions ((translation . left-to-right)
+                                        (transcription . left-to-right))))
   "Structured editing schemas for special block types.")
 
 (provide 'dpurge-schema-config)

@@ -130,7 +130,7 @@ checks the current block and updates the buffer-local state.
 
 Behavior:
 
-- inside structured entry blocks (`vocabulary`, `models`, `questions`, `parallel`): enable `dpurge-markdown-edit-mode`; in `parallel` blocks, `TAB` inserts the next `---` field separator and `M-RET` starts a new `===` record; `translation` and `transcription` fields are both forced left-to-right regardless of source script
+- inside structured entry blocks (`vocabulary`, `models`, `questions`, `parallel`, `parallel-dialog`): enable `dpurge-markdown-edit-mode`; in `parallel`/`parallel-dialog` blocks, `TAB` inserts the next `---` field separator and `M-RET` starts a new `===` record; `translation` and `transcription` fields are both forced left-to-right regardless of source script
 - inside text-like blocks (`text`, `dialog`): keep block metadata and update IME state from `as=`
 - outside special blocks: disable the minor mode and clear local state
 
@@ -282,6 +282,25 @@ separated by a lone `===` line. Field-driven behavior:
 
 `TAB` inserts the next `---` field separator and moves into it; `M-RET` starts a
 new record (`===`). A 4th+ `---` field is absorbed into the transcription.
+
+### Parallel Dialog
+
+```md
+{start-parallel-dialog lang=ara script=arab}
+**Ahmad**: مرحبا
+---
+**Ahmad**: hello
+---
+**Ahmad**: marhaba
+{end-parallel-dialog}
+```
+
+`{start-parallel-dialog}` shares `parallel`'s exact row/field grammar
+(`---` field separators, `===` record separators) and editing behavior
+(`TAB`, `M-RET`, field-driven IME/direction) — the only difference is that
+each field holds a dialog turn or heading instead of plain prose, and
+`as=` is not accepted (both columns' languages are already fixed by
+field position).
 
 ## Typical control flow
 
